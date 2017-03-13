@@ -65,6 +65,7 @@ repositories {
     maven { url = "http://maven.cil.li/" }
     maven { url = "http://maven.ic2.player.to" }
     maven { url = "http://maven.epoxide.xyz" }
+    maven { url = "http://dl.bintray.com/raoulvdberge/dev" }
     ivy {
         url "http://ae-mod.info/builds"
         layout "pattern", {
@@ -86,6 +87,7 @@ dependencies {
     deobfCompile "li.cil.oc:OpenComputers:${oc_version}:api"
     deobfCompile "net.sengir.forestry:${forestry_version}:api"
     deobfCompile "team.chisel:Chisel:${chisel_version}:api"
+    deobfCompile "refinedstorage:refinedstorage:${rs_version}:api"
     compile "appeng:appliedenergistics2:${ae_version}:api"
     compile "net.darkhax.tesla:Tesla:${tesla_version}"
 
