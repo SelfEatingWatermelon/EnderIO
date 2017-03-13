@@ -75,18 +75,18 @@ import static crazypants.enderio.EnderIO.VERSION;
 import static crazypants.enderio.ModObject.itemSoulVessel;
 import static crazypants.util.Things.TRAVEL_BLACKLIST;
 
-@Mod(modid = MODID, name = MOD_NAME, version = VERSION, dependencies = "after:endercore;after:Waila;after:JEI@[3.13.4,)", guiFactory = "crazypants.enderio.config.ConfigFactoryEIO")
+@Mod(modid = MODID, name = MOD_NAME, version = VERSION, dependencies = "after:endercore;after:Waila;after:JEI@[3.13.4,);after:refinedstorage@[1.2.23,)", guiFactory = "crazypants.enderio.config.ConfigFactoryEIO")
 public class EnderIO {
 
   public static final @Nonnull String MODID = "EnderIO";
   public static final @Nonnull String DOMAIN = NullHelper.notnullJ(MODID.toLowerCase(Locale.US), "String.toLowerCase()");
   public static final String MOD_NAME = "Ender IO";
   public static final String VERSION = "@VERSION@";
-  
-  //Enable this to use forge buckets
-//  static {
-//    FluidRegistry.enableUniversalBucket();
-//  }
+
+  // Enable this to use forge buckets
+  // static {
+  // FluidRegistry.enableUniversalBucket();
+  // }
 
   @Instance(MODID)
   public static EnderIO instance;
@@ -172,11 +172,11 @@ public class EnderIO {
 
   @EventHandler
   public void postInit(FMLPostInitializationEvent event) {
-    
+
     Config.postInit();
 
     LootManager.register();
-    
+
     // Register the enchants
     Enchantments.register();
 
@@ -193,7 +193,7 @@ public class EnderIO {
     SoulBinderRecipeManager.getInstance().addDefaultRecipes();
     PaintSourceValidator.instance.loadConfig();
 
-    //should have been registered by open  blocks
+    // should have been registered by open blocks
     if (Fluids.fluidXpJuice == null) {
       fluids.forgeRegisterXPJuice();
     }
@@ -215,7 +215,7 @@ public class EnderIO {
     // Some mods send IMCs during PostInit, so we catch them here.
     processImc(FMLInterModComms.fetchRuntimeMessages(this));
   }
-  
+
   @EventHandler
   public void serverStarted(FMLServerStartedEvent event) {
     ServerChannelRegister.load();
@@ -231,7 +231,7 @@ public class EnderIO {
   public void onImc(IMCEvent evt) {
     processImc(evt.getMessages());
   }
-  
+
   private void addModIntegration() {
     // ThaumcraftCompat.load();
     BuildcraftIntegration.init();
@@ -287,7 +287,7 @@ public class EnderIO {
       }
     }
   }
-  
+
   private void dumpMobNamesToFile() {
     File dumpFile = new File(Config.configDirectory, "mobTypes.txt");
     List<String> names = EntityUtil.getAllRegisteredMobNames();
