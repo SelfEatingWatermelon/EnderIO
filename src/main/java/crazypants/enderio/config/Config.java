@@ -426,6 +426,8 @@ public final class Config {
   public static boolean enableMEConduits = true;
   public static boolean enableOCConduits = true;
   public static boolean enableOCConduitsAnimatedTexture = true;
+  public static boolean enableRSConduits = true;
+  public static int rsConduitEnergyUsage = 0;
 
   public static List<String> soulVesselBlackList = Collections.<String> emptyList();
   public static List<String> soulVesselUnspawnableList = new ArrayList<String>();
@@ -1317,6 +1319,8 @@ public final class Config {
         "Allows OC conduits. Only has an effect with OpenComputers installed.");
     enableOCConduitsAnimatedTexture = config.getBoolean("enableOCConduitsAnimatedTexture", sectionItems.name,
         enableOCConduitsAnimatedTexture, "Use the animated texture for OC conduits.");
+    enableRSConduits = config.getBoolean("enableRSConduits", sectionItems.name, enableRSConduits, "Allows Refined Storage conduits. Only has an effect with Refined Storage installed.");
+    rsConduitEnergyUsage = config.getInt("rsConduitEnergyUsage", sectionItems.name, rsConduitEnergyUsage, 0, 32767, "The energy used by Refined Storage conduits.");
 
     soulVesselBlackList = Arrays.asList(config.getStringList("soulVesselBlackList", sectionSoulBinder.name, soulVesselBlackList.toArray(new String[0]),
         "Entities listed here will can not be captured in a Soul Vial"));

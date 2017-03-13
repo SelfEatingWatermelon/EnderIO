@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 import appeng.api.networking.IGridHost;
+
 import com.enderio.core.common.util.BlockCoord;
+import com.raoulvdberge.refinedstorage.api.network.INetworkNode;
 
 import cofh.api.energy.IEnergyReceiver;
 import crazypants.enderio.conduit.facade.EnumFacadeType;
@@ -33,9 +35,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
     @Interface(iface = "mods.immibis.microblocks.api.IMicroblockSupporterTile", modid = "ImmibisMicroblocks"),
     @Interface(iface = "li.cil.oc.api.network.Environment", modid = "OpenComputersAPI|Network"),
     @Interface(iface = "li.cil.oc.api.network.SidedEnvironment", modid = "OpenComputersAPI|Network"),
-    @Interface(iface = "cofh.api.energy.IEnergyReceiver", modid = "CoFHAPI|energy")
+    @Interface(iface = "cofh.api.energy.IEnergyReceiver", modid = "CoFHAPI|energy"),
+    @Interface(iface = "com.raoulvdberge.refinedstorage.api.network.INetworkNode", modid = "refinedstorage")
 })
-public interface IConduitBundle extends IInternalPowerReceiver, IFluidHandler, IPaintable.IPaintableTileEntity, Environment, SidedEnvironment, IEnergyReceiver, IGridHost {
+public interface IConduitBundle extends IInternalPowerReceiver, IFluidHandler, IPaintable.IPaintableTileEntity, Environment, SidedEnvironment, IEnergyReceiver, IGridHost, INetworkNode {
 
   TileEntity getEntity();
 

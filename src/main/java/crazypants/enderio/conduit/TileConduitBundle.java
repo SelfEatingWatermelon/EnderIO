@@ -11,8 +11,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import jline.internal.Log;
+
 import com.enderio.core.client.render.BoundingBox;
 import com.enderio.core.common.util.BlockCoord;
+import com.raoulvdberge.refinedstorage.api.network.INetworkMaster;
 
 import appeng.api.networking.IGridNode;
 import appeng.api.util.AECableType;
@@ -31,6 +34,7 @@ import crazypants.enderio.conduit.me.IMEConduit;
 import crazypants.enderio.conduit.oc.IOCConduit;
 import crazypants.enderio.conduit.power.IPowerConduit;
 import crazypants.enderio.conduit.redstone.InsulatedRedstoneConduit;
+import crazypants.enderio.conduit.refinedstorage.IRSConduit;
 import crazypants.enderio.conduit.registry.ConduitRegistry;
 import crazypants.enderio.conduit.render.BlockStateWrapperConduitBundle;
 import crazypants.enderio.conduit.render.ConduitRenderMapper;
@@ -54,7 +58,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import static crazypants.enderio.ModObject.blockConduitBundle;
 import static crazypants.enderio.config.Config.transparentFacadesLetThroughBeaconBeam;
 
@@ -931,4 +934,86 @@ public class TileConduitBundle extends TileEntityEio implements IConduitBundle, 
     return "SERVER: TileConduitBundle [pos=" + self.pos + ", conduits=" + self.conduits + "]";
   }
 
+  @Override
+  @Method(modid = "refinedstorage")
+  public int getEnergyUsage() {
+    return Config.rsConduitEnergyUsage;
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public BlockPos getPosition() {
+	return getLocation().getBlockPos();
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public void onConnected(INetworkMaster network) {
+	IRSConduit cond = getConduit(IRSConduit.class);
+	if (cond != null) {
+	  cond.onConnected(network);
+	}
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public void onDisconnected(INetworkMaster network) {
+    IRSConduit cond = getConduit(IRSConduit.class);
+	if (cond != null) {
+      cond.onDisconnected(network);
+	}
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public boolean isConnected() {
+	IRSConduit cond = getConduit(IRSConduit.class);
+	if (cond != null) {
+	  return cond.isConnected();
+	}
+	return false;
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public boolean canUpdate() {
+	IRSConduit cond = getConduit(IRSConduit.class);
+	if (cond != null) {
+	  return cond.canUpdate();
+	}
+	return false;
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public boolean canConduct(EnumFacing direction) {
+	IRSConduit cond = getConduit(IRSConduit.class);
+	if (cond != null) {
+	  return cond.canConduct(direction);
+	}
+	return false;
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public INetworkMaster getNetwork() {
+	IRSConduit cond = getConduit(IRSConduit.class);
+	if (cond != null) {
+	  return cond.getNetworkMaster();
+	}
+	return null;
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public World getNodeWorld() {
+	return getBundleWorldObj();
+  }
+
+  @Method(modid = "refinedstorage")
+  public void onConnectionChange(INetworkMaster network, boolean state) {
+      // NO OP
+	  Log.info("onConnectionChange");
+  }
+  
 }

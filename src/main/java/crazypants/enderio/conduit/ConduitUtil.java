@@ -19,6 +19,7 @@ import crazypants.enderio.conduit.me.MEUtil;
 import crazypants.enderio.conduit.oc.OCUtil;
 import crazypants.enderio.conduit.redstone.IRedstoneConduit;
 import crazypants.enderio.conduit.redstone.Signal;
+import crazypants.enderio.conduit.refinedstorage.RSUtil;
 import crazypants.enderio.conduit.registry.ConduitRegistry;
 import crazypants.enderio.machine.RedstoneControlMode;
 import crazypants.enderio.paint.YetaUtil;
@@ -40,7 +41,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import static crazypants.enderio.ModObject.itemConduitProbe;
 
 public class ConduitUtil {
@@ -257,7 +257,7 @@ public class ConduitUtil {
     if (typeName == null || conduitBody == null) {
       return null;
     }
-    if ((typeName.contains("conduit.oc") && !OCUtil.isOCEnabled()) || (typeName.contains("conduit.me") && !MEUtil.isMEEnabled())) {
+    if ((typeName.contains("conduit.oc") && !OCUtil.isOCEnabled()) || (typeName.contains("conduit.me") && !MEUtil.isMEEnabled()) || (typeName.contains("conduit.refinedstorage") && !RSUtil.isRSEnabled())) {
       return null;
     }
     IConduit result;
