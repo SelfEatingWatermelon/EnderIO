@@ -71,6 +71,8 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public boolean setNetwork(AbstractConduitNetwork<?, ?> network) {
+    String netname = (network == null) ? "null" : network.toString();
+    Log.info("setNetwork: " + netname);
     this.network = (RSConduitNetwork) network;
     return true;
   }
@@ -118,6 +120,16 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
       return true;
     }
     return false;
+  }
+
+  @Override
+  public void connectionsChanged() {
+    String netname = (rsnet != null) ? rsnet.toString() : "null";
+    Log.info("connectionsChanged:" + netname);
+    if (rsnet != null) {
+      rsnet.getNodeGraph().rebuild();
+    }
+    super.connectionsChanged();
   }
 
   public EnumSet<EnumFacing> getConnections() {
@@ -192,27 +204,32 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
   public void onRemovedFromBundle() {
     Log.info("onRemovedFromBundle");
 
+    super.onRemovedFromBundle();
+
     World world = bundle.getBundleWorldObj();
     TileEntity tile = getLocation().getTileEntity(world);
     if (tile instanceof INetworkNode) {
-      getNetworkMaster().getNodeGraph().rebuild();
+      INetworkMaster master = getNetworkMaster();
+      if (master != null) {
+        master.getNodeGraph().rebuild();
+      }
     }
-
-    super.onRemovedFromBundle();
   }
 
   @Override
   public void onConnected(INetworkMaster network) {
-    Log.info("onConnected");
+    String netname = (network != null) ? network.toString() : "null";
+    Log.info("onConnected: " + netname);
     this.connected = true;
     this.rsnet = network;
   }
 
   @Override
   public void onDisconnected(INetworkMaster network) {
-    Log.info("onDisconnected");
+    String netname = (network != null) ? network.toString() : "null";
+    Log.info("onDisconnected: " + netname);
     this.connected = false;
-    this.network = null;
+    this.rsnet = null;
   }
 
   @Override
@@ -222,12 +239,12 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public boolean canUpdate() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean canConduct(EnumFacing direction) {
-    return true;
+    return getConnectionMode(direction) != ConnectionMode.DISABLED;
   }
 
   @Override
