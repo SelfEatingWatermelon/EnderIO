@@ -19,7 +19,6 @@ import crazypants.enderio.conduit.gui.GuiExternalConnection;
 import crazypants.enderio.conduit.gui.RSSettings;
 import crazypants.enderio.render.registry.TextureRegistry;
 import crazypants.enderio.tool.ToolUtil;
-import jline.internal.Log;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -71,8 +70,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public boolean setNetwork(AbstractConduitNetwork<?, ?> network) {
-    String netname = (network == null) ? "null" : network.toString();
-    Log.info("setNetwork: " + netname);
     this.network = (RSConduitNetwork) network;
     return true;
   }
@@ -124,8 +121,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public void connectionsChanged() {
-    String netname = (rsnet != null) ? rsnet.toString() : "null";
-    Log.info("connectionsChanged:" + netname);
     if (rsnet != null) {
       rsnet.getNodeGraph().rebuild();
     }
@@ -183,7 +178,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public void onAddedToBundle() {
-    Log.info("onAddedToBundle");
     super.onAddedToBundle();
 
     World world = bundle.getBundleWorldObj();
@@ -202,8 +196,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public void onRemovedFromBundle() {
-    Log.info("onRemovedFromBundle");
-
     super.onRemovedFromBundle();
 
     World world = bundle.getBundleWorldObj();
@@ -218,16 +210,12 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public void onConnected(INetworkMaster network) {
-    String netname = (network != null) ? network.toString() : "null";
-    Log.info("onConnected: " + netname);
     this.connected = true;
     this.rsnet = network;
   }
 
   @Override
   public void onDisconnected(INetworkMaster network) {
-    String netname = (network != null) ? network.toString() : "null";
-    Log.info("onDisconnected: " + netname);
     this.connected = false;
     this.rsnet = null;
   }
