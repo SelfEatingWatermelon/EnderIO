@@ -110,12 +110,17 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public boolean canConnectToExternal(EnumFacing direction, boolean ignoreConnectionMode) {
+    if (getConnectionMode(direction) == ConnectionMode.DISABLED && !ignoreConnectionMode) {
+      return false;
+    }
+
     TileEntity te = getLocation().getLocation(direction).getTileEntity(getBundle().getBundleWorldObj());
     if (te instanceof INetworkNode) {
       return ((INetworkNode) te).canConduct(direction.getOpposite());
     } else if (te instanceof INetworkMaster) {
       return true;
     }
+
     return false;
   }
 
@@ -148,6 +153,14 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
   @Override
   public ConnectionMode getPreviousConnectionMode(EnumFacing dir) {
     return getNextConnectionMode(dir);
+  }
+
+  @Override
+  public void setConnectionMode(EnumFacing dir, ConnectionMode mode) {
+    if (this.rsnet != null && isConnectedTo(dir)) {
+      this.rsnet.getNodeGraph().rebuild();
+    }
+    super.setConnectionMode(dir, mode);
   }
 
   @Override
@@ -198,13 +211,8 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
   public void onRemovedFromBundle() {
     super.onRemovedFromBundle();
 
-    World world = bundle.getBundleWorldObj();
-    TileEntity tile = getLocation().getTileEntity(world);
-    if (tile instanceof INetworkNode) {
-      INetworkMaster master = getNetworkMaster();
-      if (master != null) {
-        master.getNodeGraph().rebuild();
-      }
+    if (this.rsnet != null) {
+      this.rsnet.getNodeGraph().rebuild();
     }
   }
 
