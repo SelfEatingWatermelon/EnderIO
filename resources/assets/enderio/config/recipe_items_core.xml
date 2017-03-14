@@ -571,6 +571,35 @@ XML editor will display that as tooltips when editing this file.
     </crafting>
   </recipe>
 
+  <alias name="RS_CONDUIT" item="enderio:itemRSConduit:0">
+    <dependency item="enderio:itemRSConduit:0" reverse="false"/>
+  </alias>
+  <alias name="RS_CONDUIT" item="minecraft:stone:0">
+    <!-- prevent log messages from the output tags using this -->
+    <dependency item="enderio:itemRSConduit:0" reverse="true"/>
+  </alias>
+
+  <recipe name="Conduit, Refined Storage" required="true">
+    <config name="enableRSConduits" section="Item Enabling" value="true"/>
+    <dependency item="enderio:itemRSConduit:0" />
+    <crafting>
+      <grid>
+        <item name="CONDUIT_BINDER" /><item name="CONDUIT_BINDER" /><item name="CONDUIT_BINDER" />
+        <item name="refinedstorage:cable" /><item name="refinedstorage:cable" /><item name="refinedstorage:cable" />
+        <item name="CONDUIT_BINDER" /><item name="CONDUIT_BINDER" /><item name="CONDUIT_BINDER" />
+      </grid>
+      <output name="RS_CONDUIT" amount="12">
+        <level maxlevel="1"/>
+      </output>
+      <output name="RS_CONDUIT" amount="8">
+        <level minlevel="2" maxlevel="2"/>
+      </output>
+      <output name="RS_CONDUIT" amount="2">
+        <level minlevel="3"/>
+      </output>
+    </crafting>
+  </recipe>
+
   <alias name="ME_CONDUIT" item="enderio:itemMEConduit:0">
     <dependency item="enderio:itemMEConduit:0" reverse="false"/>
   </alias>
