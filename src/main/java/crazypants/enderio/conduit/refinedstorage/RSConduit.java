@@ -124,14 +124,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
     return false;
   }
 
-  @Override
-  public void connectionsChanged() {
-    if (rsnet != null) {
-      rsnet.getNodeGraph().rebuild();
-    }
-    super.connectionsChanged();
-  }
-
   public EnumSet<EnumFacing> getConnections() {
     EnumSet<EnumFacing> cons = EnumSet.noneOf(EnumFacing.class);
     cons.addAll(getConduitConnections());
@@ -157,10 +149,18 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public void setConnectionMode(EnumFacing dir, ConnectionMode mode) {
-    if (this.rsnet != null && isConnectedTo(dir)) {
+    super.setConnectionMode(dir, mode);
+    if (this.rsnet != null) {
       this.rsnet.getNodeGraph().rebuild();
     }
-    super.setConnectionMode(dir, mode);
+  }
+
+  @Override
+  public void connectionsChanged() {
+    super.connectionsChanged();
+    if (this.rsnet != null) {
+      this.rsnet.getNodeGraph().rebuild();
+    }
   }
 
   @Override
