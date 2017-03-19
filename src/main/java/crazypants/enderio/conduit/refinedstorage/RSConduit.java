@@ -10,7 +10,6 @@ import com.raoulvdberge.refinedstorage.api.network.INetworkNode;
 
 import crazypants.enderio.conduit.AbstractConduit;
 import crazypants.enderio.conduit.AbstractConduitNetwork;
-import crazypants.enderio.conduit.ConduitUtil;
 import crazypants.enderio.conduit.ConnectionMode;
 import crazypants.enderio.conduit.IConduit;
 import crazypants.enderio.conduit.RaytraceResult;
@@ -18,7 +17,6 @@ import crazypants.enderio.conduit.geom.CollidableComponent;
 import crazypants.enderio.conduit.gui.GuiExternalConnection;
 import crazypants.enderio.conduit.gui.RSSettings;
 import crazypants.enderio.render.registry.TextureRegistry;
-import crazypants.enderio.tool.ToolUtil;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -110,10 +108,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public boolean canConnectToExternal(EnumFacing direction, boolean ignoreConnectionMode) {
-    if (getConnectionMode(direction) == ConnectionMode.DISABLED && !ignoreConnectionMode) {
-      return false;
-    }
-
     TileEntity te = getLocation().getLocation(direction).getTileEntity(getBundle().getBundleWorldObj());
     if (te instanceof INetworkNode) {
       return ((INetworkNode) te).canConduct(direction.getOpposite());
@@ -128,31 +122,19 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
     EnumSet<EnumFacing> cons = EnumSet.noneOf(EnumFacing.class);
     cons.addAll(getConduitConnections());
     for (EnumFacing dir : getExternalConnections()) {
-      if (getConnectionMode(dir) != ConnectionMode.DISABLED) {
-        cons.add(dir);
-      }
+      cons.add(dir);
     }
     return cons;
   }
 
   @Override
   public ConnectionMode getNextConnectionMode(EnumFacing dir) {
-    ConnectionMode mode = getConnectionMode(dir);
-    mode = mode == ConnectionMode.IN_OUT ? ConnectionMode.DISABLED : ConnectionMode.IN_OUT;
-    return mode;
+    return ConnectionMode.IN_OUT;
   }
 
   @Override
   public ConnectionMode getPreviousConnectionMode(EnumFacing dir) {
-    return getNextConnectionMode(dir);
-  }
-
-  @Override
-  public void setConnectionMode(EnumFacing dir, ConnectionMode mode) {
-    super.setConnectionMode(dir, mode);
-    if (this.rsnet != null) {
-      this.rsnet.getNodeGraph().rebuild();
-    }
+    return ConnectionMode.IN_OUT;
   }
 
   @Override
@@ -165,27 +147,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public boolean onBlockActivated(EntityPlayer player, EnumHand hand, RaytraceResult res, List<RaytraceResult> all) {
-    if (ToolUtil.isToolEquipped(player, hand)) {
-      if (!getBundle().getEntity().getWorld().isRemote) {
-        if (res != null && res.component != null) {
-          EnumFacing connDir = res.component.dir;
-          EnumFacing faceHit = res.movingObjectPosition.sideHit;
-          if (connDir == null || connDir == faceHit) {
-            if (getConnectionMode(faceHit) == ConnectionMode.DISABLED) {
-              setConnectionMode(faceHit, ConnectionMode.IN_OUT);
-              return true;
-            }
-            return ConduitUtil.joinConduits(this, faceHit);
-          } else if (externalConnections.contains(connDir)) {
-            setConnectionMode(connDir, getNextConnectionMode(connDir));
-            return true;
-          } else if (containsConduitConnection(connDir)) {
-            ConduitUtil.disconectConduits(this, connDir);
-            return true;
-          }
-        }
-      }
-    }
     return false;
   }
 
@@ -210,7 +171,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
   @Override
   public void onRemovedFromBundle() {
     super.onRemovedFromBundle();
-
     if (this.rsnet != null) {
       this.rsnet.getNodeGraph().rebuild();
     }
@@ -240,7 +200,7 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public boolean canConduct(EnumFacing direction) {
-    return getConnectionMode(direction) != ConnectionMode.DISABLED;
+    return true;
   }
 
   @Override
