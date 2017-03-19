@@ -147,7 +147,7 @@ public enum IconEIO implements IWidgetIcon {
   SORT_SIZE_DOWN(224, 240, SORT_DIR_DOWN),
   SORT_SIZE_UP(224, 240, SORT_DIR_UP),
   SORT_MOD_DOWN(240, 240, SORT_DIR_DOWN),
-  SORT_MOD_UP(240, 240, SORT_DIR_UP),
+  SORT_MOD_UP(240, 240, SORT_DIR_UP), 
 
   SHOW_RANGE(144, 176),
   HIDE_RANGE(160, 176),
@@ -169,7 +169,8 @@ public enum IconEIO implements IWidgetIcon {
 
   public static final IWidgetMap map = new IWidgetMap.WidgetMapImpl(TEX_SIZE, TEXTURE) {
     @Override
-    public void render(IWidgetIcon widget, double x, double y, double width, double height, double zLevel, boolean doDraw, boolean flipY) {
+    public void render(IWidgetIcon widget, double x, double y, double width, double height, double zLevel, boolean doDraw,
+        boolean flipY) {
       GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
       super.render(widget, x, y, width, height, zLevel, doDraw, flipY);
     }
