@@ -19,6 +19,7 @@ import appeng.api.networking.IGridNode;
 import appeng.api.util.AECableType;
 import appeng.api.util.AEPartLocation;
 import crazypants.enderio.EnderIO;
+import crazypants.enderio.ModObject;
 import crazypants.enderio.TileEntityEio;
 import crazypants.enderio.conduit.facade.EnumFacadeType;
 import crazypants.enderio.conduit.geom.CollidableCache;
@@ -44,6 +45,7 @@ import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
@@ -965,6 +967,12 @@ public class TileConduitBundle extends TileEntityEio implements IConduitBundle, 
   @Method(modid = "refinedstorage")
   public World getNodeWorld() {
     return getBundleWorldObj();
+  }
+
+  @Override
+  @Method(modid = "refinedstorage")
+  public ItemStack getNodeItemStack() {
+    return new ItemStack(ModObject.itemRSConduit.getItem(), 1, 0);
   }
 
   @Override
