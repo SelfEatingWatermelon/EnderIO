@@ -34,7 +34,7 @@ boolean dev = System.getenv("RELEASE") == null || System.getenv("RELEASE").equal
 
 
 // dependency string for the @Mod annotation
-ext.dependencies = "required-after:Forge@[${forgeDep_version},${forge_max_version});required-after:endercore@[${endercore_version},);after:Waila@[${waila_version},);after:JEI@[${jei_version},);after:refinedstorage@[${rs_version},)"
+ext.dependencies = "required-after:Forge@[${forgeDep_version},${forge_max_version});required-after:endercore@[${endercore_version},);after:Waila@[${waila_version},);after:JEI@[${jei_version},);after:refinedstorage@[${rs_version},${rs_max_version})"
 
 def type = 'release'
 if (project.hasProperty('mod_appendix')) {
@@ -87,7 +87,7 @@ dependencies {
     deobfCompile "li.cil.oc:OpenComputers:${oc_version}:api"
     deobfCompile "net.sengir.forestry:${forestry_version}:api"
     deobfCompile "team.chisel:Chisel:${chisel_version}:api"
-    deobfCompile "refinedstorage:refinedstorage:${rs_version}:api"
+    deobfCompile "refinedstorage:refinedstorage:${rs_version}-${rs_build}:api"
     compile "appeng:appliedenergistics2:${ae_version}:api"
     compile "net.darkhax.tesla:Tesla:${tesla_version}"
 

@@ -75,7 +75,7 @@ import static crazypants.enderio.EnderIO.VERSION;
 import static crazypants.enderio.ModObject.itemSoulVessel;
 import static crazypants.util.Things.TRAVEL_BLACKLIST;
 
-@Mod(modid = MODID, name = MOD_NAME, version = VERSION, dependencies = "after:endercore;after:Waila;after:JEI@[3.13.4,);after:refinedstorage@[1.2.25,)", guiFactory = "crazypants.enderio.config.ConfigFactoryEIO")
+@Mod(modid = MODID, name = MOD_NAME, version = VERSION, dependencies = "after:endercore;after:Waila;after:JEI@[3.13.4,);after:refinedstorage@[1.2.25,1.3.0)", guiFactory = "crazypants.enderio.config.ConfigFactoryEIO")
 public class EnderIO {
 
   public static final @Nonnull String MODID = "EnderIO";
