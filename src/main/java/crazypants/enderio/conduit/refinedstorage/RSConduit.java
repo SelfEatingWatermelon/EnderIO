@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.enderio.core.api.client.gui.ITabPanel;
 import com.enderio.core.common.vecmath.Vector4f;
+import com.raoulvdberge.refinedstorage.api.IRSAPI;
+import com.raoulvdberge.refinedstorage.api.RSAPIInject;
 import com.raoulvdberge.refinedstorage.api.network.INetworkMaster;
 import com.raoulvdberge.refinedstorage.api.network.INetworkNode;
 
@@ -30,6 +32,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import static crazypants.enderio.ModObject.itemRSConduit;
 
 public class RSConduit extends AbstractConduit implements IRSConduit {
+
+  @RSAPIInject
+  public static IRSAPI RSAPI;
 
   protected RSConduitNetwork network = null;
 
@@ -108,11 +113,21 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
 
   @Override
   public boolean canConnectToExternal(EnumFacing direction, boolean ignoreConnectionMode) {
-    TileEntity te = getLocation().getLocation(direction).getTileEntity(getBundle().getBundleWorldObj());
-    if (te instanceof INetworkNode) {
-      return ((INetworkNode) te).canConduct(direction.getOpposite());
-    } else if (te instanceof INetworkMaster) {
-      return true;
+    // Can we conduct in the provided direction?
+    if (canConduct(direction)) {
+      TileEntity facing = getLocation().getLocation(direction).getTileEntity(getBundle().getBundleWorldObj());
+
+      // Check if the facing tile hasConnectableConditions
+      if (RSAPI.hasConnectableConditions(facing)) {
+
+        // They can connect, but if they are also an INetworkNode check if they can conduct in our direction
+        if (facing instanceof INetworkNode) {
+          return ((INetworkNode) facing).canConduct(direction.getOpposite());
+        }
+
+        return true;
+      }
+
     }
 
     return false;
