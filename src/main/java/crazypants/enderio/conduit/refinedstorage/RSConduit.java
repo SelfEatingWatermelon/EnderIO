@@ -2,6 +2,7 @@ package crazypants.enderio.conduit.refinedstorage;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.enderio.core.api.client.gui.ITabPanel;
 import com.enderio.core.common.vecmath.Vector4f;
@@ -111,18 +112,27 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
     return 6;
   }
 
+  public boolean hasConnectableConditions(TileEntity te) {
+    for (Predicate<TileEntity> p : RSAPI.getConnectableConditions()) {
+      if (p.test(te)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @Override
   public boolean canConnectToExternal(EnumFacing direction, boolean ignoreConnectionMode) {
     // Can we conduct in the provided direction?
     if (canConduct(direction)) {
       TileEntity facing = getLocation().getLocation(direction).getTileEntity(getBundle().getBundleWorldObj());
 
-      // Check if the facing tile hasConnectableConditions
-      if (RSAPI.hasConnectableConditions(facing)) {
+      // Check if the facing tile has connectable conditions
+      if (hasConnectableConditions(facing)) {
 
-        // They can connect, but if they are also an INetworkNode check if they can conduct in our direction
+        // They can connect, but if they are also an INetworkNode check if they can connect in our direction
         if (facing instanceof INetworkNode) {
-          return ((INetworkNode) facing).canConduct(direction.getOpposite());
+          return ((INetworkNode) facing).canAcceptConnection(direction.getOpposite());
         }
 
         return true;
