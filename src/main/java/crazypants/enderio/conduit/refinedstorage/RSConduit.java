@@ -15,6 +15,7 @@ import crazypants.enderio.conduit.AbstractConduit;
 import crazypants.enderio.conduit.AbstractConduitNetwork;
 import crazypants.enderio.conduit.ConnectionMode;
 import crazypants.enderio.conduit.IConduit;
+import crazypants.enderio.conduit.IConduitBundle;
 import crazypants.enderio.conduit.RaytraceResult;
 import crazypants.enderio.conduit.geom.CollidableComponent;
 import crazypants.enderio.conduit.gui.GuiExternalConnection;
@@ -163,14 +164,6 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
   }
 
   @Override
-  public void connectionsChanged() {
-    super.connectionsChanged();
-    if (this.rsnet != null) {
-      this.rsnet.getNodeGraph().rebuild();
-    }
-  }
-
-  @Override
   public boolean onBlockActivated(EntityPlayer player, EnumHand hand, RaytraceResult res, List<RaytraceResult> all) {
     return false;
   }
@@ -194,28 +187,37 @@ public class RSConduit extends AbstractConduit implements IRSConduit {
   }
 
   @Override
-  public void onRemovedFromBundle() {
-    super.onRemovedFromBundle();
-    if (this.rsnet != null) {
+  public void setBundle(IConduitBundle tileConduitBundle) {
+    super.setBundle(tileConduitBundle);
+
+    // We cannot use onRemovedFromBundle to rebuild the node graph because it is called before the
+    // conduit is removed from the bundle and the rebuild will still think it is a connected node.
+    // setBundle(null) is called after the conduit is removed from the bundle so we use it instead. 
+    if (tileConduitBundle == null && this.rsnet != null) {
       this.rsnet.getNodeGraph().rebuild();
     }
   }
 
   @Override
-  public void onConnected(INetworkMaster network) {
+  public void onConnected(INetworkMaster rsnet) {
     this.connected = true;
-    this.rsnet = network;
+    this.rsnet = rsnet;
   }
 
   @Override
-  public void onDisconnected(INetworkMaster network) {
+  public void onDisconnected(INetworkMaster rsnet) {
     this.connected = false;
-    this.rsnet = null;
+    this.rsnet = rsnet;
   }
 
   @Override
   public boolean isConnected() {
     return this.connected;
+  }
+
+  @Override
+  public boolean isActive() {
+    return isConnected();
   }
 
   @Override
